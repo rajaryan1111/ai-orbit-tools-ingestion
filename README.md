@@ -1,27 +1,69 @@
 # AI Orbit Tools Ingestion
 
-Production-quality data ingestion and curation pipeline for the AI Orbit Tools module.
+[![CI](https://github.com/rajaryan1111/ai-orbit-tools-ingestion/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/rajaryan1111/ai-orbit-tools-ingestion/actions/workflows/ci.yml)
 
-## Purpose
+A Python ingestion and verification pipeline for collecting, normalizing, validating and curating AI-tool metadata for downstream applications.
 
-This repository focuses on the ingestion and curation layer: collecting tool metadata, normalizing records, validating structured data, and preparing reliable inputs for downstream AI applications.
+## What this project does
 
-## Engineering focus
+The pipeline is organized around a staged workflow:
 
-- Reproducible ingestion workflows
-- Structured data validation and normalization
-- Clear separation between ingestion and downstream consumers
-- Maintainable Python tooling and repository conventions
-- Testable components suitable for incremental development
+1. discover candidate tool records from configured sources
+2. extract and normalize metadata
+3. deduplicate candidates using stable invariants
+4. resolve and verify source URLs
+5. score records against an explicit rubric
+6. persist checkpoints so long-running work can resume safely
+7. write structured outputs and execution logs
 
-## Project status
+The repository includes deterministic local HTML fixtures so discovery and verification tests can run without depending on live websites.
 
-This repository is under active development. The README intentionally describes the project at a high level; implementation details should be verified against the current source tree.
+## Repository structure
+
+- **src/** — ingestion, discovery, extraction, verification and persistence modules
+- **config/** — source and pipeline configuration
+- **data/** — structured pipeline data and fixtures
+- **tests/** — unit and integration-style tests using deterministic fixtures
+- **scripts/** — operational helpers
+- **run.py** — pipeline entry point
+- **PROGRESS.md** — development and implementation notes
+
+## Engineering characteristics
+
+- provenance-aware source records
+- explicit scoring and verification rules
+- deduplication invariants
+- checkpoint durability and resumability
+- graceful handling of HTTP/robots failures
+- deterministic tests for source-specific extraction
+- separation between discovery, verification and persistence
 
 ## Development
 
-Clone the repository, inspect the project-specific setup files, and run the repository's documented validation/test commands before making changes.
+Use Python 3.11+.
 
-## License
+Install the test runner:
 
-See the repository for the applicable project licensing and usage terms.
+```bash
+python -m pip install --upgrade pip pytest
+```
+
+Run the test suite:
+
+```bash
+pytest -q
+```
+
+The same test command is executed by GitHub Actions on pushes and pull requests to main.
+
+## Project status
+
+The repository is under active development. `PROGRESS.md` contains detailed implementation notes; this README intentionally focuses on the architecture and reproducible development path.
+
+## Security
+
+See [SECURITY.md](SECURITY.md) for reporting guidance and data-handling expectations.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for project-specific development conventions.
